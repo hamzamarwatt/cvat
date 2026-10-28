@@ -17,6 +17,7 @@ from .services import compute_annotation_counts
 
 
 class TaskAnnotationCountsView(APIView):
+    detail = False
     iam_permission_class = TaskAnnotationCountsPermission
     iam_supports_organization_params = True
 

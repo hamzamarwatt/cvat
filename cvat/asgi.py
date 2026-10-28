@@ -20,8 +20,7 @@ import cvat.utils.remote_debugger as debug
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cvat.settings.development")
 
-application = get_asgi_application()
-
+django_application = get_asgi_application()
 
 if debug.is_debugging_enabled():
 
@@ -38,4 +37,14 @@ if debug.is_debugging_enabled():
             self.__debugger.attach_current_thread()
             return await super().handle(*args, **kwargs)
 
-    application = DebuggerApp()
+    django_application = DebuggerApp()
+
+
+async def application(scope, receive, send):
+    if scope["type"] == "websocket" and "/api/test/ws/tasks/" in scope.get("path", ""):
+        from cvat.apps.test.websocket import annotation_counts_websocket
+
+        await annotation_counts_websocket(scope, receive, send)
+        return
+
+    await django_application(scope, receive, send)

@@ -11,6 +11,15 @@
 export CVAT_HOST=localhost
 cd cvat
 docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
+```
+
+Podman on Fedora: add `-f docker-compose.podman.yml` if Fedora registry pulls fail.
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.podman.yml up -d --build
+```
+
+```bash
 docker exec -it cvat_server bash -ic 'python3 ~/manage.py createsuperuser'
 ```
 

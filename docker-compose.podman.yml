@@ -1,0 +1,34 @@
+# Podman on Fedora: use fully qualified docker.io images so pulls do not
+# hit registry.fedoraproject.org (many CVAT tags are missing there).
+#
+# Usage:
+#   export CVAT_HOST=localhost
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.podman.yml up -d --build
+
+services:
+  cvat_db:
+    image: docker.io/library/postgres:15-alpine
+
+  cvat_redis_inmem:
+    image: docker.io/library/redis:7.2.11-alpine
+
+  cvat_redis_ondisk:
+    image: docker.io/apache/kvrocks:2.15.0
+
+  traefik:
+    image: docker.io/library/traefik:v3.6
+    volumes:
+      - /run/podman/podman.sock:/var/run/docker.sock:ro
+      - ./components/analytics/grafana_conf.yml:/etc/traefik/rules/grafana_conf.yml:ro
+
+  cvat_opa:
+    image: docker.io/openpolicyagent/opa:1.12.2
+
+  cvat_clickhouse:
+    image: docker.io/clickhouse/clickhouse-server:23.11-alpine
+
+  cvat_vector:
+    image: docker.io/timberio/vector:0.26.0-alpine
+
+  cvat_grafana:
+    image: docker.io/grafana/grafana-oss:10.1.2

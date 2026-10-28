@@ -1,9 +1,18 @@
-# Podman on Fedora: use fully qualified docker.io images so pulls do not
-# hit registry.fedoraproject.org (many CVAT tags are missing there).
+# Podman on Fedora: fully qualified docker.io images + local CVAT build tags.
 #
-# Usage:
+# CVAT is NOT on registry.access.redhat.com or registry.fedoraproject.org.
+# Never pick those when prompted — use docker.io or build locally first.
+#
+# Recommended (build once, then up):
 #   export CVAT_HOST=localhost
-#   docker compose -f docker-compose.yml -f docker-compose.dev.yml -f docker-compose.podman.yml up -d --build
+#   ./scripts/podman-build-cvat.sh
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml \
+#     -f docker-compose.podman.yml up -d
+#
+# Or: same compose files with up -d --build (cvat_server / cvat_ui build from repo).
+
+x-cvat-server-image: &cvat_server_image docker.io/cvat/server:dev
+x-cvat-ui-image: &cvat_ui_image docker.io/cvat/ui:dev
 
 services:
   cvat_db:
@@ -32,3 +41,43 @@ services:
 
   cvat_grafana:
     image: docker.io/grafana/grafana-oss:10.1.2
+
+  cvat_server:
+    image: *cvat_server_image
+    pull_policy: never
+
+  cvat_worker_export:
+    image: *cvat_server_image
+    pull_policy: never
+
+  cvat_worker_import:
+    image: *cvat_server_image
+    pull_policy: never
+
+  cvat_worker_quality_reports:
+    image: *cvat_server_image
+    pull_policy: never
+
+  cvat_worker_consensus:
+    image: *cvat_server_image
+    pull_policy: never
+
+  cvat_worker_annotation:
+    image: *cvat_server_image
+    pull_policy: never
+
+  cvat_worker_chunks:
+    image: *cvat_server_image
+    pull_policy: never
+
+  cvat_worker_webhooks:
+    image: *cvat_server_image
+    pull_policy: never
+
+  cvat_worker_utils:
+    image: *cvat_server_image
+    pull_policy: never
+
+  cvat_ui:
+    image: *cvat_ui_image
+    pull_policy: never

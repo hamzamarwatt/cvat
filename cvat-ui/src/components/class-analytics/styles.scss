@@ -1,0 +1,18 @@
+.cvat-class-analytics-page {
+    padding: 24px 0 48px;
+
+    .cvat-class-analytics-title {
+        margin-top: 16px;
+    }
+
+    .cvat-class-analytics-filters {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+
+    .cvat-class-analytics-chart {
+        max-width: 960px;
+    }
+}

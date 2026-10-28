@@ -50,4 +50,13 @@ Add per-class annotation counts for a CVAT task: REST API (Django app `test`), U
 
 ## Plan changes
 
-_(Update here if scope shifts; e.g. Docker RAM limits forcing smaller COCO subset.)_
+- **Podman on Fedora:** added `docker-compose.podman.yml` after `registry.fedoraproject.org` pull failures.
+- **MO-1 / live demo:** full stack build extended past doc freeze; benchmark pasted when `:8080` is up (`docs/SUBMISSION.md`).
+
+## Decision record (item 10) — completed
+
+**Taken:** Signals → Redis → ASGI WebSocket; UI reconnect with 3s backoff.
+
+**Rejected:** Polling-only updates.
+
+**Cost of rejection:** Would not satisfy WebSocket items 8–9 or demonstrate reconnect; extra API load during annotation.

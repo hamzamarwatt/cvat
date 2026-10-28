@@ -66,7 +66,10 @@ function ClassAnalyticsPage(): JSX.Element {
         setErrorMessage('');
         try {
             const query = jobId ? `?job_id=${jobId}` : '';
-            const response = await core.server.request('GET', `/test/tasks/${taskId}/annotation-counts${query}`);
+            const response = await core.server.request(
+                `/api/test/tasks/${taskId}/annotation-counts${query}`,
+                { method: 'GET' },
+            );
             const data = response as CountsResponse;
             setPayload(data);
             setState(data.counts.length ? 'ready' : 'empty');
